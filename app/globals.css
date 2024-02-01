@@ -11,6 +11,17 @@
     font-family: "Manrope", sans-serif;
 }
 
+.box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: hotpink;
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+    z-index: 5;
+}
+
 /* START: General styles */
 .max-width {
     @apply max-w-[1440px] mx-auto;

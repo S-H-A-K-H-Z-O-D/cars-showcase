@@ -1,8 +1,11 @@
 "use client"
 
 import {CarProps} from "@/types";
-import {calculateCarRent} from "@/utils";
+import {calculateCarRent, generateCarImgUrl} from "@/utils";
 import Image from "next/image";
+import CustomButton from "@/components/CustomButton";
+import {useState} from "react";
+import {CarDetails} from "@/components/index";
 
 interface CarCardProps {
     car: CarProps;
@@ -11,6 +14,7 @@ const CarCard = ({car}: CarCardProps) =>{
     const { city_mpg, modal, year, make, transmission, drive} = car
 
     const carRent = calculateCarRent(city_mpg, year)
+    const [isOpen, setIsOpen] = useState(false)
 
     return (
         <div className={'car-card group'}>
@@ -31,7 +35,7 @@ const CarCard = ({car}: CarCardProps) =>{
             </p>
 
             <div className={'relative w-full h-40 my-3'}>
-                <Image src={"/hero.png"} alt={'car modal'} fill priority className={"object-contain"}/>
+                <Image src={generateCarImgUrl(car)} alt={'car modal'} fill priority className={"object-contain"}/>
             </div>
 
             <div className={'relative flex w-full mt-2'}>
@@ -48,20 +52,36 @@ const CarCard = ({car}: CarCardProps) =>{
                     <div className={'flex flex-col justify-center items-center gap-2'}>
                         <Image src={"/tire.svg"} alt={"tire"} width={20} height={20}/>
                         <p className={'text-[14px]'}>
-                            {transmission === 'a' ? 'Automatic' : 'Manual'}
+                            {drive.toUpperCase()}
                         </p>
                     </div>
                 </div>
 
                 <div className={'flex group-hover:invisible w-full justify-between text-gray'}>
                     <div className={'flex flex-col justify-center items-center gap-2'}>
-                        <Image src={"/steering-wheel.svg"} alt={"steering-wheel"} width={20} height={20}/>
+                        <Image src={"/gas.svg"} alt={"steering-wheel"} width={20} height={20}/>
                         <p className={'text-[14px]'}>
-                            {transmission === 'a' ? 'Automatic' : 'Manual'}
+                            {city_mpg} MPG
                         </p>
                     </div>
                 </div>
+
+                <div className="car-card__btn-container">
+                    <CustomButton
+                        title={"View More"}
+                        containerStyles={"w-full py-[16px] rounded-full bg-primary-blue"}
+                        textStyles={"text-white text-[14px] leading-[17px] font-bold"}
+                        rightIcon={"./right-arrow.svg"}
+                        handleClick={() => setIsOpen(true)}
+                    />
+                </div>
             </div>
+
+            <CarDetails
+                isOpen={isOpen}
+                closeModal={() => setIsOpen(false)}
+                car={car}
+            />
         </div>
     )
 }
